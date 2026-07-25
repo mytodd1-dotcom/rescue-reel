@@ -1,0 +1,3 @@
+genblaze-core>=0.3.4
+genblaze-gmicloud>=0.3.4
+genblaze-s3>=0.3.4
