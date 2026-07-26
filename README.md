@@ -49,6 +49,15 @@ Run the live image-to-video pipeline and archive its asset plus canonical
 manifest to B2:
 
 ```bash
+./pipeline/run_live_from_keychain.sh
+```
+
+The Keychain runner loads the bucket-scoped GMI Cloud and Backblaze B2
+credentials without writing secrets to the repository or a local `.env` file.
+
+For environments without macOS Keychain, use an ignored `.env` file:
+
+```bash
 cp .env.example .env
 # Add narrowly scoped GMI Cloud and Backblaze B2 credentials.
 set -a && source .env && set +a
