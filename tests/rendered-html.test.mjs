@@ -42,22 +42,32 @@ test("server-renders the Rescue Reel product", async () => {
 });
 
 test("ships the provenance pipeline and project assets", async () => {
-  const [pipeline, readme, manifest, hosting] = await Promise.all([
+  const [pipeline, readme, manifest, liveProof, hosting] = await Promise.all([
     readFile(new URL("../pipeline/rescue_reel.py", import.meta.url), "utf8"),
     readFile(new URL("../README.md", import.meta.url), "utf8"),
     readFile(new URL("../public/demo-manifest.json", import.meta.url), "utf8"),
+    readFile(new URL("../public/live-proof.json", import.meta.url), "utf8"),
     readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
   ]);
 
   assert.match(pipeline, /Pipeline\("rescue-reel-maple", chain=True\)/);
   assert.match(pipeline, /S3StorageBackend\.for_backblaze/);
   assert.match(pipeline, /ObjectStorageSink/);
+  assert.match(pipeline, /archive_approved_proof/);
+  assert.match(pipeline, /raise_on_failure=True/);
   assert.match(readme, /human approval/i);
   const parsedManifest = JSON.parse(manifest);
   assert.equal(parsedManifest.schema_version, "1.5");
   assert.equal(parsedManifest.run.name, "rescue-reel-maple");
   assert.equal(parsedManifest.run.steps[0].provider, "openai");
   assert.match(parsedManifest.canonical_hash, /^[a-f0-9]{64}$/);
+  const parsedProof = JSON.parse(liveProof);
+  assert.equal(parsedProof.archive_status, "verified");
+  assert.equal(parsedProof.verified, true);
+  assert.equal(parsedProof.bucket, "rescue-reel-genblaze-2026");
+  assert.match(parsedProof.asset_sha256, /^[a-f0-9]{64}$/);
+  assert.match(parsedProof.canonical_hash, /^[a-f0-9]{64}$/);
+  assert.match(parsedProof.manifest_key, /manifest\.json$/);
   assert.match(JSON.parse(hosting).project_id, /^appgprj_/);
   await access(new URL("../public/og.png", import.meta.url));
   await assert.rejects(

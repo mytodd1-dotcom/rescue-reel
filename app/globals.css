@@ -520,6 +520,71 @@ textarea:focus {
   padding: 1rem 0;
 }
 
+.generated-reel {
+  border: 1px solid var(--line);
+  margin-top: 1.4rem;
+  overflow: hidden;
+}
+
+.reel-frame {
+  aspect-ratio: 16 / 7;
+  background: var(--ink);
+  overflow: hidden;
+  position: relative;
+}
+
+.reel-frame::after {
+  background: linear-gradient(90deg, rgba(8, 19, 31, 0.9), rgba(8, 19, 31, 0.08));
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.reel-frame img {
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.03);
+  transition: transform 8s ease-out;
+  width: 100%;
+}
+
+.phase-2 .reel-frame img,
+.phase-3 .reel-frame img {
+  transform: scale(1.12) translateX(2%);
+}
+
+.reel-copy {
+  bottom: 1rem;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  left: 1rem;
+  max-width: 360px;
+  position: absolute;
+  z-index: 1;
+}
+
+.reel-copy span {
+  color: var(--amber);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.reel-copy strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.4vw, 2.25rem);
+  line-height: 1;
+  margin-top: 0.35rem;
+  text-transform: uppercase;
+}
+
+.generated-reel .generation-row {
+  border: 0;
+  margin: 0;
+  padding: 0.85rem;
+}
+
 .generation-row span {
   border: 1px solid var(--line);
   font-size: 0.7rem;
@@ -658,6 +723,116 @@ textarea:focus {
   margin: 0.25rem 0 0;
 }
 
+.manifest-card .receipt-path {
+  border-top: 1px solid rgba(245, 237, 219, 0.16);
+  display: grid;
+  gap: 0.45rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+}
+
+.manifest-card .receipt-path span {
+  color: var(--mint);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.manifest-card .receipt-path code {
+  color: rgba(245, 237, 219, 0.72);
+  font-size: 0.64rem;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.operations {
+  background: var(--ink);
+  color: var(--cream);
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(420px, 1.28fr);
+  padding: 7rem 6vw;
+}
+
+.operations-heading {
+  max-width: 560px;
+}
+
+.operations-heading h2 {
+  font-size: clamp(3rem, 5vw, 6rem);
+  letter-spacing: -0.035em;
+  margin-bottom: 1.5rem;
+}
+
+.operations-heading > p:last-child {
+  color: rgba(245, 237, 219, 0.65);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.event-stream {
+  align-self: start;
+  border: 1px solid rgba(245, 237, 219, 0.16);
+}
+
+.event {
+  align-items: center;
+  border-bottom: 1px solid rgba(245, 237, 219, 0.12);
+  color: rgba(245, 237, 219, 0.38);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  padding: 1.05rem 1.2rem;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.event:last-child {
+  border-bottom: 0;
+}
+
+.event.complete {
+  background: rgba(150, 215, 188, 0.08);
+  color: var(--cream);
+}
+
+.event > span {
+  color: var(--amber);
+  font-family: var(--font-display);
+}
+
+.event code {
+  color: inherit;
+  font-size: 0.66rem;
+}
+
+.resilience-card {
+  background: var(--amber);
+  color: var(--ink);
+  grid-column: 2;
+  padding: 1.25rem 1.4rem;
+}
+
+.resilience-card > span {
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.resilience-card > strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-top: 0.35rem;
+  text-transform: uppercase;
+}
+
+.resilience-card p {
+  line-height: 1.5;
+  margin: 0.5rem 0 0;
+  max-width: 700px;
+}
+
 .how {
   background: #e9dfc8;
   display: grid;
@@ -758,6 +933,14 @@ footer p {
     border-right: 0;
   }
 
+  .operations {
+    grid-template-columns: 1fr;
+  }
+
+  .resilience-card {
+    grid-column: 1;
+  }
+
   .how {
     grid-template-columns: 1fr;
   }
@@ -843,6 +1026,26 @@ footer p {
 
   .manifest-card dl {
     grid-template-columns: 1fr;
+  }
+
+  .manifest-card .receipt-path {
+    grid-template-columns: 1fr;
+  }
+
+  .manifest-card .receipt-path code {
+    text-align: left;
+  }
+
+  .operations {
+    padding: 5rem 1rem;
+  }
+
+  .event {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .event code {
+    grid-column: 2;
   }
 
   .how {

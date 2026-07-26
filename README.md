@@ -45,6 +45,16 @@ Create and verify a deterministic local Genblaze manifest with no API keys:
 .venv/bin/python pipeline/rescue_reel.py
 ```
 
+Archive the approved demo asset and a canonical, hash-verified manifest to the
+restricted B2 bucket without starting a new paid generation:
+
+```bash
+./pipeline/run_live_from_keychain.sh --archive-proof
+```
+
+This writes a safe public receipt to `public/live-proof.json`. The receipt
+contains object keys and integrity hashes, never credentials or presigned URLs.
+
 Run the live image-to-video pipeline and archive its asset plus canonical
 manifest to B2:
 
@@ -72,6 +82,8 @@ The live pipeline uses:
 - `S3StorageBackend.for_backblaze`
 - `KeyStrategy.HIERARCHICAL`
 - Genblaze's canonical, hash-verifiable provenance manifest
+- Explicit failure propagation so unavailable providers cannot masquerade as
+  completed media
 
 ## Safety model
 
@@ -81,6 +93,7 @@ The live pipeline uses:
 - Live credentials stay in ignored environment files.
 - B2 keys should be restricted to one application bucket.
 - A changed draft requires a new approval.
+- Provider budget failures stop before any new payment or silent retry.
 
 ## Stack
 

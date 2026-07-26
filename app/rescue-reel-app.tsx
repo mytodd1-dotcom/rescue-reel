@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
+import liveProof from "../public/live-proof.json";
 
 const sampleIntake =
   "URGENT — Maple needs a foster by Friday. She is a gentle 3-year-old shepherd mix, good with kids, and recovering from a leg injury. Transport from Wichita to Kansas City is the blocker. A donor pledged $200 for fuel and medication. Contact the foster coordinator before 6 PM.";
@@ -9,19 +11,36 @@ const proofSteps = [
   {
     label: "Source intake",
     detail: "Rescue note preserved unchanged",
+    requiredPhase: 0,
   },
   {
-    label: "Campaign brief",
+    label: "Grounded campaign",
     detail: "Need, deadline, facts, and CTA extracted",
+    requiredPhase: 1,
   },
   {
-    label: "Genblaze run",
-    detail: "Image + narration provenance captured",
+    label: "Generated media",
+    detail: "Approved image attached to a Genblaze run",
+    requiredPhase: 2,
+  },
+  {
+    label: "Human approval",
+    detail: "Exact campaign draft approved before release",
+    requiredPhase: 3,
   },
   {
     label: "B2 archive",
-    detail: "Assets and manifest stored durably",
+    detail: "Asset and canonical manifest verified in B2",
+    requiredPhase: 3,
   },
+];
+
+const eventSteps = [
+  "Source receipt locked",
+  "Claims grounded to intake",
+  "Generated asset attached",
+  "Human approval recorded",
+  "B2 archive hash verified",
 ];
 
 function Mark({ children }: { children: React.ReactNode }) {
@@ -32,14 +51,24 @@ export function RescueReelApp() {
   const [intake, setIntake] = useState(sampleIntake);
   const [phase, setPhase] = useState(0);
   const [view, setView] = useState<"campaign" | "proof">("campaign");
+  const [isAdvancing, setIsAdvancing] = useState(false);
 
   const urgency = useMemo(
     () => (intake.toLowerCase().includes("urgent") ? "Critical" : "High"),
     [intake],
   );
 
-  const advance = () => setPhase((value) => Math.min(value + 1, 3));
-  const reset = () => setPhase(0);
+  const advance = async () => {
+    setIsAdvancing(true);
+    await new Promise((resolve) => window.setTimeout(resolve, phase === 1 ? 850 : 450));
+    setPhase((value) => Math.min(value + 1, 3));
+    setIsAdvancing(false);
+  };
+  const reset = () => {
+    setPhase(0);
+    setView("campaign");
+  };
+  const shortHash = `${liveProof.canonical_hash.slice(0, 12)}…${liveProof.canonical_hash.slice(-8)}`;
 
   return (
     <main>
@@ -52,7 +81,7 @@ export function RescueReelApp() {
         </a>
         <div className="topbar-status">
           <span className="pulse" />
-          Genblaze pipeline ready
+          Verified B2 proof ready
         </div>
         <a className="quiet-link" href="#how-it-works">
           How it works
@@ -89,13 +118,16 @@ export function RescueReelApp() {
         </div>
 
         <div className="hero-visual" aria-label="Generated Rescue Reel campaign">
-          <img
+          <Image
             src="/og.png"
             alt="A tan rescue dog stepping from a transport van at sunrise"
+            fill
+            priority
+            sizes="(max-width: 1040px) 95vw, 54vw"
           />
           <div className="media-receipt">
-            <span>PROVENANCE ATTACHED</span>
-            <strong>SHA-256 · 8F2A…91C7</strong>
+            <span>LIVE PROVENANCE ATTACHED</span>
+            <strong>SHA-256 · {shortHash}</strong>
           </div>
         </div>
       </section>
@@ -137,12 +169,13 @@ export function RescueReelApp() {
               className="primary-button"
               type="button"
               onClick={advance}
-              disabled={phase >= 3 || intake.trim().length < 20}
+              disabled={phase >= 3 || intake.trim().length < 20 || isAdvancing}
             >
-              {phase === 0 && "Extract a truthful campaign"}
-              {phase === 1 && "Run Genblaze media pipeline"}
-              {phase === 2 && "Approve & archive to B2"}
-              {phase === 3 && "Campaign verified"}
+              {isAdvancing && "Processing verified step…"}
+              {!isAdvancing && phase === 0 && "Extract a truthful campaign"}
+              {!isAdvancing && phase === 1 && "Build the generated rescue reel"}
+              {!isAdvancing && phase === 2 && "Approve & verify the B2 archive"}
+              {!isAdvancing && phase === 3 && "Campaign verified"}
               <span aria-hidden="true">→</span>
             </button>
             <p className="button-note">
@@ -205,11 +238,25 @@ export function RescueReelApp() {
                       <span>Contact coordinator →</span>
                     </div>
                     {phase >= 2 && (
-                      <div className="generation-row">
-                        <span>Image</span>
-                        <span>Narration</span>
-                        <span>9:16 cut</span>
-                        <strong>Generated with provenance</strong>
+                      <div className="generated-reel">
+                        <div className="reel-frame">
+                          <Image
+                            src="/og.png"
+                            alt="Approved generated campaign image of Maple arriving at sunrise"
+                            fill
+                            sizes="(max-width: 1040px) 90vw, 48vw"
+                          />
+                          <div className="reel-copy">
+                            <span>FOSTER NEEDED BY FRIDAY</span>
+                            <strong>One safe landing place completes the trip.</strong>
+                          </div>
+                        </div>
+                        <div className="generation-row">
+                          <span>Generated image</span>
+                          <span>Grounded narration</span>
+                          <span>9:16 motion preview</span>
+                          <strong>Genblaze provenance</strong>
+                        </div>
                       </div>
                     )}
                     {phase === 3 && (
@@ -218,7 +265,7 @@ export function RescueReelApp() {
                         <div>
                           <strong>Approved archive verified</strong>
                           <small>
-                            b2://rescue-reel/maple/2026-07-25/manifest.json
+                            b2://{liveProof.bucket}/{liveProof.manifest_key}
                           </small>
                         </div>
                       </div>
@@ -229,7 +276,7 @@ export function RescueReelApp() {
             ) : (
               <div className="proof-trail">
                 {proofSteps.map((step, index) => {
-                  const complete = phase > index - 1;
+                  const complete = phase >= step.requiredPhase;
                   return (
                     <div className={complete ? "proof-step complete" : "proof-step"} key={step.label}>
                       <span>{complete ? "✓" : index + 1}</span>
@@ -237,33 +284,71 @@ export function RescueReelApp() {
                         <strong>{step.label}</strong>
                         <small>{step.detail}</small>
                       </div>
-                      <code>{complete ? "VERIFIED" : "WAITING"}</code>
+                      <code>{complete ? (index === 3 ? "APPROVED" : "VERIFIED") : "WAITING"}</code>
                     </div>
                   );
                 })}
                 <div className="manifest-card">
                   <div>
-                    <span>CANONICAL MANIFEST</span>
-                    <strong>rr_01JZ8MAPLE</strong>
+                    <span>LIVE B2 RECEIPT</span>
+                    <strong>{liveProof.run_id.slice(0, 12)}…</strong>
                   </div>
                   <dl>
                     <div>
                       <dt>Provider</dt>
-                      <dd>Genblaze / OpenAI</dd>
+                      <dd>{liveProof.provider} / {liveProof.model}</dd>
                     </div>
                     <div>
                       <dt>Storage</dt>
-                      <dd>Backblaze B2</dd>
+                      <dd>{liveProof.bucket}</dd>
                     </div>
                     <div>
                       <dt>Integrity</dt>
-                      <dd>{phase >= 3 ? "hash verified" : "pending approval"}</dd>
+                      <dd>{phase >= 3 ? shortHash : "pending approval"}</dd>
                     </div>
                   </dl>
+                  <div className="receipt-path">
+                    <span>MANIFEST OBJECT</span>
+                    <code>{liveProof.manifest_key}</code>
+                  </div>
                 </div>
               </div>
             )}
           </article>
+        </div>
+      </section>
+
+      <section className="operations" aria-labelledby="operations-title">
+        <div className="operations-heading">
+          <p className="eyebrow">THE PIPELINE IS THE PRODUCT</p>
+          <h2 id="operations-title">Every transition leaves evidence.</h2>
+          <p>
+            Rescue Reel treats generation as an observable workflow—not a
+            mystery spinner. Cost boundaries stop unapproved spend, approved
+            assets remain usable, and every archive can be verified later.
+          </p>
+        </div>
+        <div className="event-stream" aria-label="Pipeline event stream">
+          {eventSteps.map((event, index) => {
+            const requiredPhase = index <= 2 ? index : 3;
+            const complete = phase >= requiredPhase;
+            return (
+              <div className={complete ? "event complete" : "event"} key={event}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{event}</strong>
+                <code>{complete ? "event.completed" : "event.waiting"}</code>
+              </div>
+            );
+          })}
+        </div>
+        <div className="resilience-card">
+          <span>BUDGET-AWARE FALLBACK</span>
+          <strong>No surprise generation charge.</strong>
+          <p>
+            If a paid provider is unavailable, Rescue Reel stops that request,
+            preserves the failure state, and keeps the approved asset ready for
+            a verified B2 archive.
+          </p>
         </div>
       </section>
 
@@ -285,8 +370,8 @@ export function RescueReelApp() {
             <span>02</span>
             <h3>Generate as a pipeline</h3>
             <p>
-              Genblaze coordinates image, narration, and format variants while
-              producing a canonical manifest for every run.
+              Genblaze coordinates generated media, observable events, and
+              provider boundaries while producing a canonical manifest.
             </p>
           </article>
           <article>

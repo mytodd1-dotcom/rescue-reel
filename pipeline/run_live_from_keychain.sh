@@ -22,4 +22,8 @@ B2_APP_KEY="$(read_secret rescue-reel-b2-app-key)"
 B2_BUCKET="$(read_secret rescue-reel-b2-bucket)"
 B2_REGION="$(read_secret rescue-reel-b2-region)"
 
-exec .venv/bin/python pipeline/rescue_reel.py --live "$@"
+if [[ "$#" -eq 0 ]]; then
+  exec .venv/bin/python pipeline/rescue_reel.py --live
+fi
+
+exec .venv/bin/python pipeline/rescue_reel.py "$@"

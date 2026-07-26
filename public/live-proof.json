@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "archive_status": "verified",
+  "archived_at": "2026-07-26T21:53:00.087456+00:00",
+  "approval": "human-approved-demo",
+  "bucket": "rescue-reel-genblaze-2026",
+  "region": "us-east-005",
+  "run_id": "3c686743-078e-4f24-bbd5-6cd6f5a5dc97",
+  "run_name": "rescue-reel-maple",
+  "provider": "openai",
+  "model": "gpt-image-2",
+  "asset_key": "rescue-reel/runs/2026-07-26/3c686743-078e-4f24-bbd5-6cd6f5a5dc97/assets/8711f064-6f52-49e0-8ab8-58f638254fbf.png",
+  "asset_sha256": "938c9dbd86e2c5f84bc81599a09ce83a5aef49d65f6af46a5bb634e4967effb9",
+  "manifest_key": "rescue-reel/runs/2026-07-26/3c686743-078e-4f24-bbd5-6cd6f5a5dc97/manifest.json",
+  "manifest_uri": "https://s3.us-east-005.backblazeb2.com/rescue-reel-genblaze-2026/rescue-reel/runs/2026-07-26/3c686743-078e-4f24-bbd5-6cd6f5a5dc97/manifest.json",
+  "canonical_hash": "abf75d17b4cdd475cd8817be9736fb440f126a3b6b45e24eca0e4310adc0b84a",
+  "verified": true
+}
