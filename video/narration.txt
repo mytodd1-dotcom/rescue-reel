@@ -1,0 +1,51 @@
+Rescue teams do not need another content generator. They need a faster way to
+turn a real emergency into action without losing the truth along the way.
+
+This is Rescue Reel.
+
+It starts with one messy note about Maple: a foster deadline, a recovering leg,
+a transport problem between Wichita and Kansas City, two hundred dollars
+already pledged, and one clear contact deadline.
+
+The original note stays visible and unchanged. When the coordinator asks Rescue
+Reel to extract a campaign, the system separates confirmed facts from
+persuasive language. It keeps the Friday deadline. It keeps the medical detail.
+It keeps the pledged support. Then it turns those facts into one useful request:
+offer Maple a fourteen-day foster home.
+
+Next, Rescue Reel builds the media package. The campaign image, grounded
+narration, and vertical motion treatment stay attached to the same source
+instead of becoming anonymous files. The interface shows the generation step
+as an event, not a mystery spinner.
+
+But generated does not mean approved.
+
+A person must approve the exact campaign before Rescue Reel treats it as ready
+for action. That decision is the boundary between fast automation and careless
+automation. If the draft changes, the approval must change with it.
+
+Now open the proof trail.
+
+Every check is visible: source preserved, claims grounded, generated media
+attached, human approval recorded, and the Backblaze B2 archive verified.
+
+This receipt is real. The run ID, provider and model, B2 bucket, object path,
+asset hash, and canonical manifest hash came from an approved asset archived
+through Genblaze and read back from Backblaze B2. The public interface exposes
+the evidence without exposing credentials or temporary signed links.
+
+Genblaze is the provenance and orchestration layer. Backblaze B2 is the durable
+home for the approved media and its canonical manifest. Together, they let a
+small rescue team answer a simple but important question: what exactly did we
+approve, and can we prove it later?
+
+The workflow is also budget-aware. If a paid provider is unavailable, Rescue
+Reel stops the request. It does not hide the failure, invent a completed result,
+or trigger surprise spending. An already approved asset can still move through
+the verified archive path.
+
+That is the product: need, truth, media, approval, action, and memory.
+
+Rescue Reel gives small teams the speed of generated media without asking them
+to surrender accountability. The story can be emotional. The evidence cannot
+be imaginary.
