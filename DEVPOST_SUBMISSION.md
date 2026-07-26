@@ -1,5 +1,10 @@
 # Rescue Reel
 
+## Links
+
+- Live product: https://rescue-reel-media.flyguy.chatgpt.site/
+- Source code: https://github.com/mytodd1-dotcom/rescue-reel
+
 ## Tagline
 
 Turn urgent animal-rescue notes into approved campaign media with a verifiable
@@ -97,4 +102,3 @@ prove which exact bytes were approved.
 - Stream live Genblaze progress events from a job worker to the interface.
 - Add rescue-organization workspaces and reusable approval policies.
 - Add B2 Event Notifications for post-archive distribution workflows.
-

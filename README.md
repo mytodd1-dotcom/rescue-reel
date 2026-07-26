@@ -2,6 +2,9 @@
 
 **Turn urgent rescue needs into verified action.**
 
+[Open the live product](https://rescue-reel-media.flyguy.chatgpt.site/) ·
+[View the source on GitHub](https://github.com/mytodd1-dotcom/rescue-reel)
+
 Rescue Reel converts a messy animal-rescue intake into ready-to-approve
 campaign media while preserving the source facts, the human approval, and the
 provenance of every generated asset.
